@@ -20,7 +20,28 @@ kafkaExporter:
   kafka:
     servers: []
       # - kafka:9092
+    version: "1.0.0"
 
+  sasl:
+    enabled: false
+    handshake: true
+    username: ""
+    password: ""
+
+  tls:
+    enabled: false
+    insecure-skip-tls-verify: false
+
+  # topic.filter: '.*'
+  # group.filter: '.*'
+
+  # web:
+  #   listen-address: ':9308'
+  #   telemetry-path: "/metrics"
+
+  log:
+    level: info
+    enable-sarama: false
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
