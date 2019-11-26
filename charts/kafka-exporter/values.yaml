@@ -20,7 +20,7 @@ kafkaExporter:
   kafka:
     servers: []
       # - kafka:9092
-    version: "1.0.0"
+    # version: "1.0.0"
 
   sasl:
     enabled: false
@@ -31,13 +31,9 @@ kafkaExporter:
   tls:
     enabled: false
     insecure-skip-tls-verify: false
-
-  # topic.filter: '.*'
-  # group.filter: '.*'
-
-  # web:
-  #   listen-address: ':9308'
-  #   telemetry-path: "/metrics"
+    caFile: ""
+    certFile: ""
+    keyFile: ""
 
   log:
     level: info
