@@ -24,7 +24,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args:
-            {{- range .Values.kafkaExporter.servers }}
+            {{- range .Values.kafkaExporter.kafka.servers }}
             - "--kafka.server={{ . }}"
             {{- end }}
           ports:

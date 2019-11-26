@@ -17,8 +17,10 @@ service:
   port: 9308
 
 kafkaExporter:
-  servers: []
-    # - kafka:9092
+  kafka:
+    servers: []
+      # - kafka:9092
+
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
