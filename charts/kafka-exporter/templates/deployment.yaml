@@ -24,9 +24,14 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args:
+            {{- if .Values.kafkaExporter}}
             {{- range .Values.kafkaExporter.kafka.servers }}
             - "--kafka.server={{ . }}"
             {{- end }}
+            {{- if .Values.kafkaExporter.kafka.version }}
+            - --kafka.version={{ .Values.kafkaExporter.kafka.version }}
+            {{- end }}
+            {{- end}}
             {{- if .Values.kafkaExporter.sasl.enabled }}
             - --sasl.enabled
             {{- if not .Values.kafkaExporter.sasl.handshake }}
@@ -34,6 +39,12 @@ spec:
             {{- end }}
             - --sasl.username={{ .Values.kafkaExporter.sasl.username }}
             - --sasl.password={{ .Values.kafkaExporter.sasl.password }}
+            {{- end }}
+            {{- if .Values.kafkaExporter.tls.enabled}}
+            - --tls.enabled
+            - --tls.ca-file=/etc/tls-certs/ca-file
+            - --tls.cert-file=/etc/tls-certs/cert-file
+            - --tls.key-file=/etc/tls-certs/key-file
             {{- end }}
             {{- if .Values.kafkaExporter.log }}
             - --log.level={{ .Values.kafkaExporter.log.level }}
@@ -45,9 +56,16 @@ spec:
             - name: metrics
               containerPort: 9308
               protocol: TCP
+          {{- if .Values.kafkaExporter.tls.enabled }}
+          volumeMounts:
+          - name: tls-certs
+            mountPath: "/etc/tls-certs/"
+            readOnly: true
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
+
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -58,4 +76,10 @@ spec:
     {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- if .Values.kafkaExporter.tls.enabled }}
+      volumes:
+      - name: tls-certs
+        secret:
+          secretName: {{ include "kafka-exporter.fullname" . }}
     {{- end }}
