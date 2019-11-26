@@ -41,7 +41,7 @@ kafkaExporter:
 
   log:
     level: info
-    enable-sarama: false
+    enableSarama: false
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
